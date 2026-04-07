@@ -19,7 +19,7 @@ f500 <- newCEOs %>%
 oldCEOs <- read.csv("C:\\Users\\AD12991\\OneDrive - Lumen\\Desktop\\f500.csv")
 
 
-globalF500 <- oldCEOs[,c(1,8)]
+globalF500 <- oldCEOs
 
 
 # glue together, remember we don't have very many features for the non gloabl F500
@@ -32,3 +32,8 @@ combined_companies %>%
   dplyr::group_by(company) %>%
   summarise(count = n()) %>%
   filter(count > 1)
+
+# since no duplicates we can proceed
+
+nodes <- combined_companies
+
