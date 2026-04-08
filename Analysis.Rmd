@@ -1,0 +1,9 @@
+---
+title: "Fortune 500 Network Analysis"
+output: html_document
+---
+
+```{r}
+library(igraph)
+igraph::graph_from_data_frame(edges, directed=F, vertices = nodes)
+```
