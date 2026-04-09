@@ -48,10 +48,16 @@ globalF500 <- globalF500 %>%
 # glue together, remember we don't have very many features for the non gloabl F500
 
  edges <- f500 %>%
-  inner_join(globalF500, by = join_by(school))
+  inner_join(globalF500, by = join_by(school)) %>%
+  filter(!is.na(ceo.x), !is.na(ceo.y))
  
  # possible many to many problem here
  
  edges <- edges[, c(1, 5)]
  
  # good enough we can continue
+ 
+ # lets check node has every vertex company here
+ 
+edges %>%
+  inner_join(nodes, by=join_by(company.x == company))

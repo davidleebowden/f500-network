@@ -24,7 +24,8 @@ globalF500 <- oldCEOs
 
 # glue together, remember we don't have very many features for the non gloabl F500
 combined_companies <- f500 %>%
-  full_join(globalF500, by = join_by(company))
+  full_join(globalF500, by = join_by(company)) %>%
+  filter(!is.na(ceo.x), !is.na(ceo.y))
 
 
 # you can see that there are no duplicates
@@ -36,4 +37,3 @@ combined_companies %>%
 # since no duplicates we can proceed
 
 nodes <- combined_companies
-
