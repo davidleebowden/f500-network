@@ -31,3 +31,32 @@ It seems like these five companies have the most ceo school connections to other
 indices <- match(list1, V(companies)$name)
 nodes[c(indices),]
 ```
+
+Have to be careful since some of these attributes are completely null, might need to filter later on
+
+Number of edges
+
+```{r}
+edge_count <- igraph::gsize(companies)
+print(edge_count)
+```
+
+Number of vertices
+
+```{r}
+node_count <- igraph::gorder(companies)
+print(node_count)
+```
+
+Other Metrics
+
+```{r}
+metrics <- data.frame(
+  degree = degree(companies),
+  betweenness = betweenness(companies),
+  closeness = closeness(companies),
+  eigenvector = eigen_centrality(companies)$vector
+)
+
+V(companies)$name[apply(metrics, 2, which.max)]
+```
