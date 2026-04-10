@@ -1,0 +1,62 @@
+---
+title: "Fortune 500 Network Analysis"
+output: html_document
+---
+
+```{r}
+library(igraph)
+companies <- igraph::graph_from_data_frame(edges, directed=F, vertices = nodes)
+
+# network too big we need to shrink to degrees > 0 (just for graphing purposes)
+node_degree <- igraph::degree(companies)
+
+companies_filtered <- igraph::induced_subgraph(companies, vids = which(node_degree > 0))
+
+igraph::plot.igraph(companies_filtered, layout = layout_nicely, vertex.label.cex = 0.6)
+```
+
+What are the top 5 highest degree companies?
+
+```{r}
+
+order1 <- order(igraph::degree(companies), decreasing = TRUE)
+
+list1 <- V(companies)$name[order1][1:5]
+V(companies)$name[order1][1:5]
+```
+
+It seems like these five companies have the most ceo school connections to other companies
+
+```{r}
+indices <- match(list1, V(companies)$name)
+nodes[c(indices),]
+```
+
+Have to be careful since some of these attributes are completely null, might need to filter later on
+
+Number of edges
+
+```{r}
+edge_count <- igraph::gsize(companies)
+print(edge_count)
+```
+
+Number of vertices
+
+```{r}
+node_count <- igraph::gorder(companies)
+print(node_count)
+```
+
+Other Metrics
+
+```{r}
+metrics <- data.frame(
+  degree = degree(companies),
+  betweenness = betweenness(companies),
+  closeness = closeness(companies),
+  eigenvector = eigen_centrality(companies)$vector
+)
+
+V(companies)$name[apply(metrics, 2, which.max)]
+```

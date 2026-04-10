@@ -9,7 +9,7 @@ newtable <- site %>%
   rvest::html_node("table") %>%
   rvest::html_table()
 newdf <- as.data.frame(newtable)
-newCEOs <- cbind(newdf[,2], newdf[,7])
+newCEOs <- cbind(newdf[,2], newdf[,8])
 newCEOs <- as.data.frame(newCEOs)
 f500 <- newCEOs %>%
   rename('company' = V1, 'ceo' = V2)
@@ -28,7 +28,7 @@ f500[,2][f500$ceo == 'Kevin Murphy'] <- NA
 # right here we need to add school to ceo list
 f500 <- f500 %>%
   filter(ceo != 'Haviv Ilan' | ceo != 'Kevin Murphy') %>%
-  inner_join(ceosInfo,by=join_by(ceo))
+  left_join(ceosInfo,by=join_by(ceo == ceo))
 
 
 f500 %>%
@@ -48,10 +48,16 @@ globalF500 <- globalF500 %>%
 # glue together, remember we don't have very many features for the non gloabl F500
 
  edges <- f500 %>%
-  inner_join(globalF500, by = join_by(school))
+  inner_join(globalF500, by = join_by(school == clean_school)) %>%
+  filter(!is.na(school))
+ 
+ edges <- edges %>%
+   filter(!is.na(ceo.x), !is.na(ceo.y))
  
  # possible many to many problem here
  
  edges <- edges[, c(1, 5)]
  
  # good enough we can continue
+ 
+ 
