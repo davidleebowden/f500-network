@@ -60,3 +60,24 @@ metrics <- data.frame(
 
 V(companies)$name[apply(metrics, 2, which.max)]
 ```
+
+Other Metrics 2
+
+```{r}
+mean_distance(companies)
+transitivity(companies)
+
+hist(degree(companies))
+hist(distances(companies))
+```
+
+SBM:
+
+```{r}
+library(blockmodels)
+
+adj <- as_adjacency_matrix(companies, sparse = FALSE)
+
+bm <- blockmodels::BM_bernoulli(membership_type="SBM", adj = adj)
+bm$estimate()
+```
